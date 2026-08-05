@@ -1,0 +1,72 @@
+\begin{tikzpicture}[
+  x=1cm,y=1cm,
+  >=Latex,
+  flow/.style={-Latex,line width=0.75pt,draw=LCGreen},
+  stage/.style={draw=LCBlue!72!black,fill=LCBlue!7,line width=0.65pt,
+                minimum height=1.92cm,rounded corners=1.2pt,align=center,
+                inner xsep=3pt,inner ysep=3pt,font=\small},
+  active/.style={draw=LCGreen!82!black,fill=LCGreen!8,line width=0.75pt,
+                 minimum height=1.92cm,rounded corners=1.2pt,align=center,
+                 inner xsep=3pt,inner ysep=3pt,font=\small},
+  opt/.style={draw=LCOrange!85!black,fill=LCOrange!7,line width=0.75pt,
+              minimum height=1.92cm,rounded corners=1.2pt,align=center,
+              inner xsep=3pt,inner ysep=3pt,font=\small},
+  stepbadge/.style={circle,fill=LCBlue!85!black,text=white,inner sep=1.5pt,
+               font=\bfseries\small},
+  alt/.style={draw=black!45,fill=black!2,line width=0.5pt,rounded corners=1pt,
+              minimum height=0.82cm,align=center,inner xsep=3pt,font=\small},
+  elab/.style={font=\scriptsize,inner sep=1pt}
+]
+  \node[opt,text width=2.10cm] (optim) at (1.20,2.34) {\textbf{Classical}\\\textbf{optimizer}\\
+    proposes $\boldsymbol\theta$};
+
+  \node[stage,text width=2.02cm] (cones) at (4.00,2.34) {\textbf{Localize terms}\\
+    $C=\sum_t C_t$\\
+    $k_t=|L_p(t)|$};
+  \node[stepbadge] at ([xshift=-0.96cm,yshift=1.10cm]cones.center) {1};
+
+  \node[stage,text width=2.10cm] (profile) at (6.75,2.34) {\textbf{Profile cones}\\
+    $k_{\max},\ \{|\mathcal G_k|\}$\\
+    $S_p=\sum_t2^{k_t}$};
+  \node[stepbadge] at ([xshift=-0.99cm,yshift=1.10cm]profile.center) {2};
+
+  \node[active,text width=2.45cm] (plan) at (9.72,2.34) {\textbf{Plan + batch}\\
+    choose $B_k$ + checkpoints\\
+    named-active bytes $\leq M$};
+  \node[stepbadge,fill=LCGreen!82!black] at ([xshift=-1.18cm,yshift=1.10cm]plan.center) {3};
+
+  \node[active,text width=2.72cm] (execute) at (13.00,2.34) {\textbf{Forward + adjoint}\\
+    active tensor $B_k\!\times\!2^k$\\
+    $f_t=\langle C_t\rangle$; shared $\nabla f_t$};
+  \node[stepbadge,fill=LCGreen!82!black] at ([xshift=-1.31cm,yshift=1.10cm]execute.center) {4};
+
+  \node[active,text width=2.62cm] (reduce) at (16.22,2.34) {\textbf{Exact sum}\\
+    $F=c_0+\sum_t f_t$\\
+    $\nabla F=\sum_t\nabla f_t\in\mathbb R^{2p}$};
+
+  \draw[flow,draw=LCOrange!85!black] (optim.east) -- node[elab,above]{$\boldsymbol\theta$} (cones.west);
+  \draw[flow] (cones.east) -- (profile.west);
+  \draw[flow] (profile.east) -- (plan.west);
+  \draw[flow] (plan.east) -- node[elab,above,text=LCGreen!60!black]{\textbf{FIT}} (execute.west);
+  \draw[flow] (execute.east) -- (reduce.west);
+
+  \draw[flow,draw=LCOrange!85!black]
+    (reduce.north) -- ++(0,0.62)
+    -- node[elab,above]{$F\in\mathbb R,\ \nabla F\in\mathbb R^{2p}$ (no global state)} ($(optim.north)+(0,0.62)$)
+    -- (optim.north);
+
+  \node[alt,text width=4.05cm,anchor=west,draw=LCOrange!85!black,fill=LCOrange!7]
+    (global) at (3.05,0.30) {\textcolor{LCOrange!90!black}{\textbf{Global state:}} $2^n$ amplitudes,\\
+      optional materialized $2^n$ cost table};
+  \node[alt,text width=4.55cm,anchor=west]
+    (tensor) at (7.62,0.30) {\textbf{Low-width contraction:} large, low-width\\
+      cones can favor reusable contraction plans};
+  \node[elab,anchor=west,text=black!60] at (12.55,0.30)
+    {\begin{tabular}{@{}l@{}}\textbf{Rejection diagnostics only.}\\
+     LC names a candidate backend class;\\
+     an external layer, not LC, launches it.\end{tabular}};
+
+  \draw[LCOrange!75!black,densely dashed,-Latex] (plan.south) --
+    node[elab,right,pos=0.32,text=LCOrange!70!black]{\textbf{REJECT}} (tensor.north);
+  \draw[black!35,densely dashed,-Latex] (plan.south) to[out=-150,in=60] (global.north east);
+\end{tikzpicture}

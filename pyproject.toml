@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lc-implicit-qaoa"
+version = "0.1.0"
+description = "Exact objective and adjoint-gradient evaluator for structured local QUBO-QAOA via batched light cones."
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "networkx>=3.2",
+  "pandas>=2.1",
+  "psutil>=5.9",
+]
+
+[project.optional-dependencies]
+gpu = ["cupy-cuda12x>=13.0"]
+case-study = ["scikit-learn>=1.4"]
+plots = [
+  "matplotlib>=3.8",
+  "pypdf>=5.0",
+  "reportlab>=4.4",
+  "svglib>=2.0",
+]
+
+[project.scripts]
+lcqaoa = "lcqaoa.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["lcqaoa*"]
