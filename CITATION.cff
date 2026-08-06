@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+title: >-
+  LC-Implicit-QAOA: Active-Workspace-Capped Exact
+  Objective-and-Gradient Evaluation for Training over
+  Bounded QUBO Light Cones
+message: >-
+  If you use this software or refer to its results, please
+  cite it using the metadata below.
+type: software
+authors:
+  - given-names: Chih-Chung
+    family-names: Hsu
+    email: chihchung@nycu.edu.tw
+    affiliation: >-
+      Institute of Smart Industry and Green Energy,
+      National Yang Ming Chiao Tung University, Hsinchu, Taiwan
+    website: 'https://cchsu.info'
+repository-code: 'https://github.com/jesse1029/lc-implicit-qaoa'
+url: 'https://cchsu.info'
+abstract: >-
+  Exact objective and adjoint-gradient evaluation for QUBO-QAOA
+  over bounded light cones. The evaluator profiles cone structure
+  before allocation, jointly selects equal-size microbatches and
+  checkpoint schedules under a named active-workspace byte budget,
+  and rejects infeasible requests before any local-amplitude or
+  workspace allocation. It materializes neither a global state nor
+  a global cost table, so its cost is governed by cone cardinality
+  rather than by qubit count.
+keywords:
+  - QAOA
+  - QUBO
+  - quantum simulation
+  - light cone
+  - adjoint differentiation
+  - combinatorial optimization
+license: MIT
+version: 0.1.0

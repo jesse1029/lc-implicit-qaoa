@@ -4,8 +4,17 @@ Exact objective **and** adjoint-gradient evaluation for QUBO-QAOA over bounded
 light cones, with a byte-budgeted fit-or-reject execution contract.
 
 Reference implementation for *LC-Implicit-QAOA: Active-Workspace-Capped Exact
-Objective-and-Gradient Evaluation for Training over Bounded QUBO Light Cones*
-(Chih-Chung Hsu, National Yang Ming Chiao Tung University).
+Objective-and-Gradient Evaluation for Training over Bounded QUBO Light Cones*.
+
+**Author** — [Chih-Chung Hsu](https://cchsu.info)
+&lt;[chihchung@nycu.edu.tw](mailto:chihchung@nycu.edu.tw)&gt;
+Institute of Smart Industry and Green Energy,
+National Yang Ming Chiao Tung University, Hsinchu, Taiwan
+
+Questions, bug reports, and reproduction problems belong in
+[Issues](https://github.com/jesse1029/lc-implicit-qaoa/issues); please include the
+`status` string the evaluator returned, since a rejection is a documented outcome
+rather than a crash.
 
 ## What this is
 
@@ -99,6 +108,9 @@ for the two precision traps involved.
 
 ## Citation
 
+Machine-readable metadata is in [CITATION.cff](CITATION.cff); GitHub's
+"Cite this repository" button reads it directly.
+
 ```bibtex
 @misc{hsu2026lcimplicitqaoa,
   title  = {LC-Implicit-QAOA: Active-Workspace-Capped Exact Objective-and-Gradient
@@ -111,6 +123,8 @@ for the two precision traps involved.
 }
 ```
 
+`ARXIV_ID_PENDING` is replaced once the preprint is announced.
+
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT, © 2026 Chih-Chung Hsu. See [LICENSE](LICENSE).
