@@ -106,6 +106,27 @@ The scripts are ordered so that an agreement gate on the objective and on all
 `2p` gradients must pass before any timing is quoted. See that directory's README
 for the two precision traps involved.
 
+## Comparison with TensorCircuit-NG
+
+The paper does not time TensorCircuit-NG, positioning it as a complementary
+route rather than a superseded baseline. [`benchmarks/tensorcircuit_ng/`](benchmarks/tensorcircuit_ng/)
+adds that measurement on one RTX 3090, accuracy-matched:
+
+| | per query | compile per instance | 200 queries |
+|---|---:|---:|---:|
+| LC (complex64) | 1.02 s | none | **204 s** |
+| TC-NG (complex128, jax+jit) | 0.37 s | 1008 s | 1082 s |
+
+*ER deg-2 n=128 p=2, objective and all gradients.* TC-NG is 2.8× faster per
+query and needs 1552 queries to repay its compile — which is charged again for
+every new QUBO instance. At `complex64` TC-NG's error is 100×–2000× worse than
+LC's, so it cannot trade that precision for speed here.
+
+The short version: **LC does not compute faster, it computes sooner.** Read the
+[full write-up](benchmarks/tensorcircuit_ng/) for the accuracy table, the
+break-even points, and the five measurement errors that had to be fixed before
+any of these numbers meant anything.
+
 ## Citation
 
 Machine-readable metadata is in [CITATION.cff](CITATION.cff); GitHub's
