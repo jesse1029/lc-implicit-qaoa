@@ -72,6 +72,12 @@ per circuit structure — that is, **once per QUBO instance**, not once per run.
 | ER deg-3 n=24 | objective | 57.7 s | 496 queries |
 | 3-regular n=24 | **obj+grad** | **143.4 s** | **2636 queries** |
 | ER deg-2 n=128 | **obj+grad** | **1008.4 s** | **1552 queries** |
+| ER deg-3 n=24 (k=23) | **obj+grad** | *compile did not complete* | — |
+
+That last row is not missing data, it is the result: on the largest cone tested,
+`k=23`, the gradient compile exhausted host memory and the process was killed
+before producing a timing. LC evaluates the same request in 0.39 s per query
+with no compile at all. A compile that cannot finish is an infinite break-even.
 
 End-to-end on ER deg-2 n=128, objective **and gradient** — the query this paper
 is about:
@@ -99,11 +105,27 @@ complementary route rather than a superseded baseline is the correct one.
 OOM mid-run, requesting up to 131,072 GiB on scale-free cones, and enabling
 cotengra with an 8 GiB slice target rescued exactly one of nine such cells.
 
+The difference in *how* they fail is the part worth keeping. LC's rejection is a
+return value computed from a byte model before anything is allocated, so a
+planner can act on it. TC-NG's failure arrives as an allocator error partway
+through, or — at `k=23` with gradients — as the compiler being killed. Both are
+"cannot run this", but only one of them is answerable in advance.
+
 ## Reproducing
 
-`final_bench.py` in the repository root of the benchmark run; raw output in
-[`results_rtx3090.json`](results_rtx3090.json). Hardware: RTX 3090 24 GB,
-TensorCircuit-NG 1.8.0, JAX 0.10.2 (CUDA 12), CuPy 14.1.1, `JAX_ENABLE_X64=1`.
+[`final_bench.py`](final_bench.py); raw output in
+[`results_rtx3090.json`](results_rtx3090.json), 15 of a planned 18 rows.
+Hardware: RTX 3090 24 GB, TensorCircuit-NG 1.8.0, JAX 0.10.2 (CUDA 12),
+CuPy 14.1.1, `JAX_ENABLE_X64=1`, `tc.set_dtype` as tabulated.
 
-One row (ER deg-3 n=24, obj+grad) is still compiling at the time of writing and
-is absent from the JSON.
+Two practical notes for anyone re-running this:
+
+- **Run Python with `-u`.** Buffered stdout means a process killed mid-run loses
+  everything it printed. Here the JSON was 10 minutes ahead of the log, which is
+  the only reason the completed rows survived.
+- **Do not enable cotengra's `ReusableHyperOptimizer` under JAX.** It forks
+  worker processes for path search, and forking a multithreaded JAX process
+  deadlocks. On these cells it was not worth it anyway: measured against the
+  default contractor it came out within a few percent and marginally slower
+  (1.65 vs 1.72 s, 8.57 vs 8.72 s, 4.70 vs 4.88 s). Its only real benefit
+  appeared on cones past LC's guardrail, which this comparison does not time.
