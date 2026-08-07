@@ -16,7 +16,11 @@ authors:
       National Yang Ming Chiao Tung University, Hsinchu, Taiwan
     website: 'https://cchsu.info'
 repository-code: 'https://github.com/jesse1029/lc-implicit-qaoa'
-url: 'https://cchsu.info'
+url: 'https://arxiv.org/abs/2608.05610'
+identifiers:
+  - type: other
+    value: 'arXiv:2608.05610'
+    description: arXiv preprint
 abstract: >-
   Exact objective and adjoint-gradient evaluation for QUBO-QAOA
   over bounded light cones. The evaluator profiles cone structure

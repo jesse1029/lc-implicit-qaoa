@@ -117,13 +117,13 @@ Machine-readable metadata is in [CITATION.cff](CITATION.cff); GitHub's
             Evaluation for Training over Bounded QUBO Light Cones},
   author = {Hsu, Chih-Chung},
   year   = {2026},
-  eprint = {ARXIV_ID_PENDING},
+  eprint = {2608.05610},
   archivePrefix = {arXiv},
-  primaryClass  = {quant-ph}
+  primaryClass  = {cs.ET}
 }
 ```
 
-`ARXIV_ID_PENDING` is replaced once the preprint is announced.
+Preprint: [arXiv:2608.05610](https://arxiv.org/abs/2608.05610).
 
 ## License
 
